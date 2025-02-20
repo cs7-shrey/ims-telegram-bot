@@ -1,0 +1,11 @@
+venv
+testing
+__pycache__
+exp.ipynb
+exp.py
+.env
+save_users.py
+
+runs.txt
+users.txt
+notices.txt
