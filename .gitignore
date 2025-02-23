@@ -1,4 +1,5 @@
 venv
+.venv
 testing
 __pycache__
 exp.ipynb

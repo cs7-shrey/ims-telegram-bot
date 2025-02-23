@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from extraction import get_new_state, get_new_soup
 from push_notice import send_custom_message
 import os
@@ -8,29 +9,30 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from telegram.request import HTTPXRequest
 import mysql.connector
 
+load_dotenv()
 
 TOKEN: Final = os.getenv('TELEGRAM_BOT_TOKEN')
 BOT_USERNAME: Final = '@NSUTNotificationsBot'
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     mydb = mysql.connector.connect(
-    host = os.getenv('MYSQLHOST'),
-    user = os.getenv('MYSQLUSER'),
-    password = os.getenv('MYSQLPASSWORD'),
-    database = os.getenv('MYSQLDATABASE'),
-    port=os.getenv('MYSQLPORT')
+        host = os.getenv('MYSQL_HOST'),
+        user = os.getenv('MYSQL_USER'),
+        password = os.getenv('MYSQL_PASSWORD'),
+        database = os.getenv('MYSQL_DATABASE'),
+        port=os.getenv('MYSQL_PORT')
     )
     cursor = mydb.cursor()
     user_ids = []
     current_id = update.message.chat_id
     print(current_id)
 
-    cursor.execute("SELECT chat_id FROM users")
+    cursor.execute("SELECT chat_id FROM chat_user")
     data = cursor.fetchall()
     user_ids = [int(i[0]) for i in data]
 
     if current_id not in user_ids:
-        cursor.execute("INSERT INTO users (chat_id) VALUES (%s)", (current_id, ))
+        cursor.execute("INSERT INTO chat_user (chat_id) VALUES (%s)", (current_id, ))
         mydb.commit()
         print("user added")
     await update.message.reply_text("Hi😇 You'll recieve new notices when they arrive. Below are some recent notices...")

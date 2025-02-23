@@ -8,15 +8,18 @@ import os
 import re
 import telegram
 from telegram.request import HTTPXRequest
+from dotenv import load_dotenv
 
+load_dotenv()
 
 mydb = mysql.connector.connect(
-    host = os.getenv('MYSQLHOST'),
-    user = os.getenv('MYSQLUSER'),
-    password = os.getenv('MYSQLPASSWORD'),
-    database = os.getenv('MYSQLDATABASE'),
-    port=os.getenv('MYSQLPORT')
+    host = os.getenv('MYSQL_HOST'),
+    user = os.getenv('MYSQL_USER'),
+    password = os.getenv('MYSQL_PASSWORD'),
+    database = os.getenv('MYSQL_DATABASE'),
+    port=os.getenv('MYSQL_PORT')
 )
+
 cursor = mydb.cursor()
 
 BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
@@ -62,7 +65,7 @@ async def main():
     bot = telegram.Bot(token=BOT_TOKEN, request=trequest)
     user_ids = []
     if custom_messages:
-        cursor.execute("SELECT chat_id FROM users")
+        cursor.execute("SELECT chat_id FROM chat_user")
         data = cursor.fetchall()
         user_ids = [i[0] for i in data]
         for message in custom_messages:

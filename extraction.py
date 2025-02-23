@@ -3,14 +3,18 @@ import re
 import requests
 from bs4 import BeautifulSoup
 import mysql.connector
+from dotenv import load_dotenv
+
+load_dotenv()
 
 mydb = mysql.connector.connect(
-    host = os.getenv('MYSQLHOST'),
-    user = os.getenv('MYSQLUSER'),
-    password = os.getenv('MYSQLPASSWORD'),
-    database = os.getenv('MYSQLDATABASE'),
-    port=os.getenv('MYSQLPORT')
+    host = os.getenv('MYSQL_HOST'),
+    user = os.getenv('MYSQL_USER'),
+    password = os.getenv('MYSQL_PASSWORD'),
+    database = os.getenv('MYSQL_DATABASE'),
+    port=os.getenv('MYSQL_PORT')
 )
+ 
 cursor = mydb.cursor()
 
 
